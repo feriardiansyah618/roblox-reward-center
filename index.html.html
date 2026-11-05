@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en" style="height:100%;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox Modern Reward Center & Device Selector</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-image: url('https://assets.turbologo.com/blog/en/2021/11/18064716/roblox-brand-1.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 12, 20, 0.88);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, #ff2c2c, #00c3ff, transparent);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: floatUp linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(105vh) scale(0.4); opacity: 0; }
+            30% { opacity: 0.7; }
+            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+        }
+
+        header {
+            background: rgba(18, 22, 35, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid rgba(255, 44, 44, 0.4);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.6);
+            padding: 15px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            z-index: 3;
+            position: relative;
+        }
+
+        header img {
+            width: 48px;
+            filter: drop-shadow(0 0 10px rgba(255, 44, 44, 0.5));
+        }
+
+        header h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #ff2c2c, #00c3ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+        }
+
+        main {
+            position: relative;
+            z-index: 3;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 30px;
+            padding: 40px 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .generator-box {
+            background: rgba(22, 27, 43, 0.92);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 44, 44, 0.4);
+            border-radius: 20px;
+            padding: 35px 30px;
+            width: 100%;
+            max-width: 480px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7), 0 0 25px rgba(255, 44, 44, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            color: #fff;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        p {
+            font-size: 0.95rem;
+            color: #a0aec0;
+            margin-bottom: 25px;
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: #00c3ff;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            font-size: 1rem;
+            background-color: rgba(13, 17, 28, 0.9);
+            color: #fff;
+            transition: all 0.3s ease;
+            outline: none;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        input:focus, select:focus {
+            border-color: #ff2c2c;
+            box-shadow: 0 0 12px rgba(255, 44, 44, 0.4);
+            background-color: rgba(18, 24, 40, 0.95);
+        }
+
+        .btn {
+            margin-top: 10px;
+            width: 100%;
+            background: linear-gradient(90deg, #ff2c2c, #00c3ff);
+            color: #fff;
+            font-weight: 600;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(255, 44, 44, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0, 195, 255, 0.6);
+            filter: brightness(1.1);
+        }
+
+        .loading, #redirect, #offerSection {
+            display: none;
+            margin-top: 20px;
+            color: #fff;
+        }
+
+        .dots::after {
+            content: '';
+            display: inline-block;
+            animation: dots 1.2s infinite;
+        }
+
+        @keyframes dots {
+            0% { content: ''; }
+            33% { content: '.'; }
+            66% { content: '..'; }
+            100% { content: '...'; }
+        }
+
+        .countdown {
+            font-weight: bold;
+            color: #00c3ff;
+        }
+
+        .offerlst {
+            margin-top: 20px;
+            background: rgba(13, 17, 28, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .custom-instructions {
+            font-size: 0.9rem;
+            color: #ffd700;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .link_a {
+            display: inline-block;
+            width: 100%;
+            background: linear-gradient(90deg, #207ce5, #00c3ff);
+            padding: 14px;
+            border-radius: 10px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(32, 124, 229, 0.4);
+        }
+
+        .link_a:hover {
+            filter: brightness(1.15);
+            transform: scale(1.02);
+        }
+
+        .log-panel {
+            background: rgba(22, 27, 43, 0.92);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(0, 195, 255, 0.3);
+            border-radius: 20px;
+            padding: 25px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+        }
+
+        .log-panel h3 {
+            font-size: 1.2rem;
+            color: #00c3ff;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .log-container {
+            max-height: 310px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding-right: 5px;
+        }
+
+        .log-container::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .log-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+
+        .log-item {
+            background: rgba(13, 17, 28, 0.8);
+            border-left: 3px solid #ff2c2c;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .log-user {
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .log-amount {
+            color: #00ff88;
+            font-weight: 600;
+        }
+
+        .log-time {
+            font-size: 0.75rem;
+            color: #718096;
+        }
+
+        footer {
+            margin: 40px 10px 25px;
+            font-size: 0.85rem;
+            color: #718096;
+            text-align: center;
+            z-index: 3;
+            position: relative;
+        }
+
+        footer a {
+            color: #00c3ff;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            header h1 { font-size: 1.3rem; }
+            .generator-box, .log-panel { padding: 25px 18px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="particles" id="particles"></div>
+
+    <header>
+        <img src="https://logos-world.net/wp-content/uploads/2022/09/Roblox-New-Logo.png" alt="Roblox Logo">
+        <h1>Roblox Reward Center Pro</h1>
+    </header>
+
+    <main>
+        <div class="generator-box">
+            <h2>💎 Instant Robux Generator</h2>
+            <p>Enter your Roblox username and select your device platform.</p>
+            
+            <div class="input-group">
+                <label for="username">Roblox Username</label>
+                <input type="text" id="username" placeholder="E.g., GamerPro2026">
+            </div>
+
+            <div class="input-group">
+                <label for="device">Select Device / Platform</label>
+                <select id="device">
+                    <option value="Mobile (Android/iOS)">📱 Mobile (Android / iOS)</option>
+                    <option value="Computer (PC/Laptop)">💻 Computer (PC / Laptop)</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="robux">Select Robux Amount</label>
+                <select id="robux">
+                    <option value="500">500 Robux</option>
+                    <option value="1000">1,000 Robux</option>
+                    <option value="5000">5,000 Robux</option>
+                    <option value="10000">10,000 Robux (VIP)</option>
+                </select>
+            </div>
+
+            <button class="btn" id="generateBtn">Start Generating</button>
+
+            <div class="loading" id="loading">
+                <p>🔄 Connecting to secure Roblox servers<span class="dots"></span></p>
+            </div>
+
+            <div id="redirect">
+                <p>✅ Account & Device Verified!</p>
+                <p>Completing system verification in <span class="countdown" id="count">5</span> seconds...</p>
+            </div>
+
+            <!-- Tombol yang terhubung langsung ke Link Locker AdBlueMedia Anda -->
+            <div id="offerSection" class="offerlst">
+                <div class="custom-instructions">⚠️ Human Verification Required to dispatch Robux!</div>
+                <a class="link_a" href="https://locked-content.com/?dcf91dc" target="_blank">
+                    Verify Account Now 🚀
+                </a>
+            </div>
+        </div>
+
+        <div class="log-panel">
+            <h3>📊 Live Activity Log</h3>
+            <p style="font-size: 0.82rem; margin-bottom: 12px;">Real-time list of users who successfully claimed their rewards today:</p>
+            <div class="log-container" id="logContainer">
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>⚠️ Make sure your username is correct. The system operates automatically.<br>
+        <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+    </footer>
+
+    <script>
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 20; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            const size = Math.random() * 6 + 3;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.animationDuration = `${6 + Math.random() * 8}s`;
+            particle.style.animationDelay = `${Math.random() * 5}s`;
+            particlesContainer.appendChild(particle);
+        }
+
+        const sampleNames = ['Rizky_Gamer', 'AlexBlox99', 'SitiRobux', 'BudiSantoso', 'ZianGaming', 'Nabil_ID', 'Dika_X', 'Fajar_Viper', 'AlyaQueen', 'Reza_07', 'Putri_K', 'Andi_Store'];
+        const sampleAmounts = ['500 Robux', '1,000 Robux', '5,000 Robux', '10,000 Robux'];
+        const logContainer = document.getElementById('logContainer');
+
+        function addLogEntry(username, amount, timeAgo) {
+            const item = document.createElement('div');
+            item.className = 'log-item';
+            item.innerHTML = `
+                <div>
+                    <span class="log-user">${username}</span> successfully generated <span class="log-amount">${amount}</span>
+                </div>
+                <div class="log-time">${timeAgo}</div>
+            `;
+            logContainer.prepend(item);
+            if (logContainer.children.length > 15) {
+                logContainer.removeChild(logContainer.lastChild);
+            }
+        }
+
+        const initialLogs = [
+            { name: 'AlexBlox99', amount: '5,000 Robux', time: 'Just now' },
+            { name: 'SitiRobux', amount: '1,000 Robux', time: '1 minute ago' },
+            { name: 'BudiSantoso', amount: '10,000 Robux', time: '3 minutes ago' },
+            { name: 'Rizky_Gamer', amount: '500 Robux', time: '5 minutes ago' }
+        ];
+        initialLogs.forEach(l => addLogEntry(l.name, l.amount, l.time));
+
+        setInterval(() => {
+            const randomUser = sampleNames[Math.floor(Math.random() * sampleNames.length)] + Math.floor(Math.random() * 90 + 10);
+            const randomAmount = sampleAmounts[Math.floor(Math.random() * sampleAmounts.length)];
+            addLogEntry(randomUser, randomAmount, 'Just now');
+        }, 4500);
+
+        const btn = document.getElementById('generateBtn');
+        const usernameInput = document.getElementById('username');
+        const deviceSelect = document.getElementById('device');
+        const robuxSelect = document.getElementById('robux');
+        const loading = document.getElementById('loading');
+        const redirect = document.getElementById('redirect');
+        const countdownElem = document.getElementById('count');
+        const offerSection = document.getElementById('offerSection');
+
+        btn.addEventListener('click', () => {
+            const uname = usernameInput.value.trim();
+            if (uname === '') {
+                alert('Please enter your Roblox username first!');
+                usernameInput.focus();
+                return;
+            }
+
+            btn.style.display = 'none';
+            usernameInput.disabled = true;
+            deviceSelect.disabled = true;
+            robuxSelect.disabled = true;
+            loading.style.display = 'block';
+
+            setTimeout(() => {
+                loading.style.display = 'none';
+                redirect.style.display = 'block';
+
+                let count = 5;
+                const timer = setInterval(() => {
+                    count--;
+                    countdownElem.textContent = count;
+                    if (count <= 0) {
+                        clearInterval(timer);
+                        redirect.style.display = 'none';
+                        offerSection.style.display = 'block';
+                        addLogEntry(uname, robuxSelect.value + ' Robux', 'Just now');
+                    }
+                }, 1000);
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
